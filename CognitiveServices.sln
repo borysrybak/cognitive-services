@@ -3,19 +3,17 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27130.2036
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CognitiveServices", "CognitiveServices\CognitiveServices.csproj", "{346A1AEB-D422-4E1E-BEAD-79B6BB6B7FCC}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Vision", "Vision", "{10A3E92F-33B8-4F1D-A311-4DE73AFEFB42}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Speech", "Speech", "{95C291D3-2847-4F0A-B435-103E9A3D61F8}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Language", "Language", "{FEA41E12-F844-4ACA-A8B1-316ECC4522DB}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Search", "Search", "{5DF03F01-E421-41CD-AF41-B0AF168C6AA2}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Knowledge", "Knowledge", "{85ECB173-C725-4EF2-A4FE-400D54ECBD49}"
 EndProject
 Global
-	GlobalSection(SolutionConfigurationPlatforms) = preSolution
-		Debug|Any CPU = Debug|Any CPU
-		Release|Any CPU = Release|Any CPU
-	EndGlobalSection
-	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{346A1AEB-D422-4E1E-BEAD-79B6BB6B7FCC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{346A1AEB-D422-4E1E-BEAD-79B6BB6B7FCC}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{346A1AEB-D422-4E1E-BEAD-79B6BB6B7FCC}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{346A1AEB-D422-4E1E-BEAD-79B6BB6B7FCC}.Release|Any CPU.Build.0 = Release|Any CPU
-	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
