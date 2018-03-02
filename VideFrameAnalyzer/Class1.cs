@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace VideFrameAnalyzer
+namespace VideoFrameAnalyzer
 {
     public class Class1
     {
