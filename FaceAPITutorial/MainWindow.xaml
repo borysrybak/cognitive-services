@@ -1,16 +1,23 @@
 ﻿<Window x:Class="FaceAPITutorial.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="MainWindow" Height="700" Width="960">
+        xmlns:viewmodel="clr-namespace:FaceAPITutorial"
+        xmlns:mousebehaviourservice="clr-namespace:FaceAPITutorial.Services"
+        Title="{Binding WindowTitle}" Height="700" Width="960">
+    <Window.DataContext>
+        <viewmodel:MainViewModel />
+    </Window.DataContext>
     <Grid x:Name="BackPanel">
-        <Image x:Name="FacePhoto" Stretch="Uniform" Margin="0,0,0,50" MouseMove="FacePhoto_MouseMove" />
+        <Image Source="{Binding FacePhoto}" Stretch="Uniform" Margin="0,0,0,50"
+               mousebehaviourservice:MouseBehaviour.MouseMoveCommand ="{Binding MouseMoveCommand}">
+        </Image>
         <DockPanel DockPanel.Dock="Bottom">
-            <Button x:Name="BrowseButton" Width="72" Height="20" VerticalAlignment="Bottom" HorizontalAlignment="Left"
+            <Button Width="72" Height="20" VerticalAlignment="Bottom" HorizontalAlignment="Left"
                     Content="Browse..."
-                    Click="BrowseButton_Click" />
+                    Command="{Binding BrowseImageCommand}" />
             <StatusBar VerticalAlignment="Bottom">
                 <StatusBarItem>
-                    <TextBlock Name="faceDescriptionStatusBar" />
+                    <TextBlock Text="{Binding FaceDescriptionStatusBar}" />
                 </StatusBarItem>
             </StatusBar>
         </DockPanel>
