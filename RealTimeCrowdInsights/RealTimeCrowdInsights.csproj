@@ -93,6 +93,15 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Interfaces\IComputerVisionService.cs" />
+    <Compile Include="Interfaces\IEmotionService.cs" />
+    <Compile Include="Interfaces\IFaceService.cs" />
+    <Compile Include="Interfaces\IOpenComputerVisionService.cs" />
+    <Compile Include="Models\LiveCameraResult.cs" />
+    <Compile Include="Services\ComputerVisionService.cs" />
+    <Compile Include="Services\EmotionService.cs" />
+    <Compile Include="Services\FaceService.cs" />
+    <Compile Include="Services\OpenComputerVisionService.cs" />
     <Compile Include="ViewModels\ShellViewModel.cs" />
     <Compile Include="Views\ShellView.xaml.cs">
       <DependentUpon>ShellView.xaml</DependentUpon>
@@ -126,9 +135,7 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Models\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Page Include="Views\ShellView.xaml">
       <SubType>Designer</SubType>
