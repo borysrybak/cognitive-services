@@ -19,9 +19,9 @@ namespace RealTimeCrowdInsights
         {
             _container = new SimpleContainer();
 
-            _container.PerRequest<ShellViewModel>();
+            _container.Singleton<IWindowManager, WindowManager>();
 
-            IoC.GetInstance = GetInstance;
+            _container.PerRequest<ShellViewModel>();
         }
 
         protected override void OnStartup(object sender, StartupEventArgs e)

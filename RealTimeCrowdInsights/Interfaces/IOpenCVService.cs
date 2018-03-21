@@ -1,6 +1,6 @@
 ﻿namespace RealTimeCrowdInsights.Interfaces
 {
-    public interface IEmotionService
+    public interface IOpenCVService
     {
     }
 }

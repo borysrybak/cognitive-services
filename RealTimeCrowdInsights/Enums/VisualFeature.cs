@@ -1,6 +1,6 @@
 ﻿namespace RealTimeCrowdInsights.Enums
 {
-    public enum VisualFeatures
+    public enum VisualFeature
     {
         Categories,
         Tags,
