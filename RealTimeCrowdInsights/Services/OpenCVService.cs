@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace RealTimeCrowdInsights.Services
 {
-    class OpenComputerVisionService
+    class OpenCVService
     {
     }
 }

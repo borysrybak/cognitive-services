@@ -93,6 +93,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Enums\VisualFeatures.cs" />
     <Compile Include="Interfaces\IComputerVisionService.cs" />
     <Compile Include="Interfaces\IEmotionService.cs" />
     <Compile Include="Interfaces\IFaceService.cs" />
@@ -101,7 +102,7 @@
     <Compile Include="Services\ComputerVisionService.cs" />
     <Compile Include="Services\EmotionService.cs" />
     <Compile Include="Services\FaceService.cs" />
-    <Compile Include="Services\OpenComputerVisionService.cs" />
+    <Compile Include="Services\OpenCVService.cs" />
     <Compile Include="ViewModels\ShellViewModel.cs" />
     <Compile Include="Views\ShellView.xaml.cs">
       <DependentUpon>ShellView.xaml</DependentUpon>
