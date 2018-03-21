@@ -28,24 +28,24 @@ namespace RealTimeCrowdInsights.Services
             return _faceServiceClient;
         }
 
-        public Face[] GetFacesFromImage(MemoryStream imageStream, IEnumerable<FaceAttributeType> faceAttributeTypes = null)
+        public Face[] DetectFaces(MemoryStream imageStream, IEnumerable<FaceAttributeType> faceAttributeTypes = null)
         {
-            return FacesFromImageStream(imageStream, faceAttributeTypes).Result;
+            return DetectFacesFromImage(imageStream).Result;
         }
 
-        public Face[] GetFacesFromImage(string imagePath, IEnumerable<FaceAttributeType> faceAttriubuteTypes = null)
+        public Face[] DetectFaces(string imagePath, IEnumerable<FaceAttributeType> faceAttriubuteTypes = null)
         {
-            return FacesFromImagePath(imagePath, faceAttriubuteTypes).Result;
+            return DetectFacesFromImage(imagePath).Result;
         }
 
-        public Face[] GetFacesWithDefaultAttributesFromImage(MemoryStream imageStream)
+        public Face[] DetectFacesWithDefaultAttributes(MemoryStream imageStream)
         {
-            return FacesWithDefaultAttributesFromImage(imageStream).Result;
+            return DetectFacesFromImage(imageStream, _defaultFaceAttributes).Result;
         }
 
-        public Face[] GetFacesWithDefaultAttributesFromImage(string imagePath)
+        public Face[] DetectFacesWithDefaultAttributes(string imagePath)
         {
-            return FacesWithDefaultAttributesFromImage(imagePath).Result;
+            return DetectFacesFromImage(imagePath, _defaultFaceAttributes).Result;
         }
 
         public int GetFaceServiceClientAPICallCount()
@@ -53,37 +53,11 @@ namespace RealTimeCrowdInsights.Services
             return _faceAPICallCount;
         }
 
-        private async Task<Face[]> FacesFromImageStream(MemoryStream imageStream, IEnumerable<FaceAttributeType> faceAttributeTypes = null)
+        private async Task<Face[]> DetectFacesFromImage(dynamic image, IEnumerable<FaceAttributeType> faceAttributeTypes = null)
         {
-            var result = await _faceServiceClient.DetectAsync(imageStream, true, false, faceAttributeTypes);
+            var result = await _faceServiceClient.DetectAsync(image, true, false, faceAttributeTypes);
 
             _faceAPICallCount++;
-
-            return result;
-        }
-        private async Task<Face[]> FacesFromImagePath(string imagePath, IEnumerable<FaceAttributeType> faceAttriubuteTypes = null)
-        {
-            var result = await _faceServiceClient.DetectAsync(imagePath, true, false, faceAttriubuteTypes);
-
-            _faceAPICallCount++;
-
-            return result;
-        }
-        private async Task<Face[]> FacesWithDefaultAttributesFromImage(MemoryStream imageStream)
-        {
-            var result = new Face[0];
-            var defaultAttributes = _defaultFaceAttributes;
-
-            result = await _faceServiceClient.DetectAsync(imageStream, true, false, defaultAttributes);
-
-            return result;
-        }
-        private async Task<Face[]> FacesWithDefaultAttributesFromImage(string imagePath)
-        {
-            var result = new Face[0];
-            var defaultAttributes = _defaultFaceAttributes;
-
-            result = await _faceServiceClient.DetectAsync(imagePath, true, false, defaultAttributes);
 
             return result;
         }
