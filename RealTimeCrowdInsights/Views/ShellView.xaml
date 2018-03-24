@@ -20,8 +20,8 @@
             </Grid.ColumnDefinitions>
             <StackPanel Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Left">
                 <ComboBox x:Name="CameraList"  Width="100" Margin="5,5,0,5" />
-                <Button Content="Analyze" Width="75" Padding="5,0" Margin="5,5,0,5" />
-                <Button Content="Stop" Width="75" Padding="5,0" Margin="5,5,0,5" />
+                <Button x:Name="StartAnalyze" Content="Analyze" Width="75" Padding="5,0" Margin="5,5,0,5" />
+                <Button x:Name="StopAnalyze" Content="Stop" Width="75" Padding="5,0" Margin="5,5,0,5" />
             </StackPanel>
             <StackPanel Grid.Column="1" Orientation="Horizontal">
 
@@ -31,7 +31,7 @@
 
         <!--#region BODY-->
         <Grid Grid.Row="1">
-            <Image Margin="5" />
+            <Image Source="{Binding ImageSource}" Margin="5" />
         </Grid>
         <!--#endregion BODY-->
 

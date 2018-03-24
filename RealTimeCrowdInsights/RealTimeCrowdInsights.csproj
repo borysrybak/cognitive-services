@@ -76,6 +76,7 @@
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.IO.Compression" />
     <Reference Include="System.Numerics" />
     <Reference Include="System.Runtime.InteropServices.RuntimeInformation, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
@@ -112,11 +113,13 @@
     <Compile Include="Interfaces\IEmotionService.cs" />
     <Compile Include="Interfaces\IFaceService.cs" />
     <Compile Include="Interfaces\IOpenCVService.cs" />
+    <Compile Include="Interfaces\IVideoFrameAnalyzerService.cs" />
     <Compile Include="Models\LiveCameraResult.cs" />
     <Compile Include="Services\ComputerVisionService.cs" />
     <Compile Include="Services\EmotionService.cs" />
     <Compile Include="Services\FaceService.cs" />
     <Compile Include="Services\OpenCVService.cs" />
+    <Compile Include="Services\VideoFrameAnalyzerService.cs" />
     <Compile Include="ViewModels\ShellViewModel.cs" />
     <Compile Include="Views\ShellView.xaml.cs">
       <DependentUpon>ShellView.xaml</DependentUpon>
@@ -151,7 +154,9 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Data\haarcascade_frontalface_default.xml" />
+    <Content Include="Data\haarcascade_frontalface_default.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Page Include="Views\ShellView.xaml">
@@ -160,13 +165,19 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Data\haarcascade_frontalface_alt_tree.xml" />
+    <Content Include="Data\haarcascade_frontalface_alt_tree.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Data\haarcascade_frontalface_alt2.xml" />
+    <Content Include="Data\haarcascade_frontalface_alt2.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Data\haarcascade_frontalface_alt.xml" />
+    <Content Include="Data\haarcascade_frontalface_alt.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\VideoFrameAnalyzer\VideoFrameAnalyzer.csproj">

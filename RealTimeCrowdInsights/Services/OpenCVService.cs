@@ -15,7 +15,7 @@ namespace RealTimeCrowdInsights.Services
 
         public CascadeClassifier DefaultFrontalFaceDetector()
         {
-            return GetLoadedClassifier(HaarCascade.FrontalFaceDefault);
+            return GetLoadedClassifier(HaarCascade.FrontalFaceAlt2);
         }
 
         private CascadeClassifier GetLoadedClassifier(HaarCascade haarCascade)
@@ -41,16 +41,16 @@ namespace RealTimeCrowdInsights.Services
                 case HaarCascade.FrontalCatFaceExtended:
                     break;
                 case HaarCascade.FrontalFaceAlt:
-                    result = "../Data/haarcascade_frontalface_alt.xml";
+                    result = "Data/haarcascade_frontalface_alt.xml";
                     break;
                 case HaarCascade.FrontalFaceAlt2:
-                    result = "../Data/haarcascade_frontalface_alt2.xml";
+                    result = "Data/haarcascade_frontalface_alt2.xml";
                     break;
                 case HaarCascade.FrontalFaceAltTree:
-                    result = "../Data/haarcascade_frontalface_alt_tree.xml";
+                    result = "Data/haarcascade_frontalface_alt_tree.xml";
                     break;
                 case HaarCascade.FrontalFaceDefault:
-                    result = "../Data/haarcascade_frontalface_default.xml";
+                    result = "Data/haarcascade_frontalface_default.xml";
                     break;
                 case HaarCascade.FulBody:
                     break;

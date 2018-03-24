@@ -1,4 +1,6 @@
 ﻿using Caliburn.Micro;
+using RealTimeCrowdInsights.Interfaces;
+using RealTimeCrowdInsights.Services;
 using RealTimeCrowdInsights.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -20,6 +22,8 @@ namespace RealTimeCrowdInsights
             _container = new SimpleContainer();
 
             _container.Singleton<IWindowManager, WindowManager>();
+            _container.Singleton<IVideoFrameAnalyzerService, VideoFrameAnalyzerService>();
+            _container.Singleton<IOpenCVService, OpenCVService>();
 
             _container.PerRequest<ShellViewModel>();
         }
