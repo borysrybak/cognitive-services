@@ -14,17 +14,14 @@ namespace RealTimeFaceInsights.Services
 {
     public class FaceService : IFaceService
     {
-        private readonly string _faceServiceClientSubscriptionKey = Properties.Settings.Default.FaceAPIKey.Trim();
-        private readonly string _faceServiceClientApiRoot = Properties.Settings.Default.FaceAPIHost;
-        private readonly FaceServiceClient _faceServiceClient;
         private readonly List<FaceAttributeType> _faceAttributes;
-        
+        private FaceServiceClient _faceServiceClient;
         private int _faceAPICallCount = 0;
         private List<double> _ageArray = new List<double>();
 
         public FaceService()
         {
-            _faceServiceClient = new FaceServiceClient(_faceServiceClientSubscriptionKey, _faceServiceClientApiRoot);
+            InitializeFaceServiceClient();
             _faceAttributes = new List<FaceAttributeType>();
             InitializeAllFaceAttributes();//InitializeDefaultFaceAttributes();
         }
@@ -32,6 +29,11 @@ namespace RealTimeFaceInsights.Services
         public FaceServiceClient GetFaceServiceClient()
         {
             return _faceServiceClient;
+        }
+
+        public void InitializeFaceServiceClient()
+        {
+            InitializeFaceAPIClient();
         }
 
         public Face[] DetectFaces(MemoryStream imageStream, IEnumerable<FaceAttributeType> faceAttributeTypes = null)
@@ -79,6 +81,12 @@ namespace RealTimeFaceInsights.Services
             return GetAgeStatistics();
         }
 
+        private void InitializeFaceAPIClient()
+        {
+            var faceServiceClientSubscriptionKey = Properties.Settings.Default.FaceAPIKey.Trim();
+            var faceServiceClientApiRoot = Properties.Settings.Default.FaceAPIHost;
+            _faceServiceClient = new FaceServiceClient(faceServiceClientSubscriptionKey, faceServiceClientApiRoot);
+        }
         private async Task<LiveCameraResult> SubmitFacesAnalysisFunction(VideoFrame frame)
         {
             var result = new LiveCameraResult();

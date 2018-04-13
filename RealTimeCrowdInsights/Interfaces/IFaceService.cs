@@ -11,6 +11,7 @@ namespace RealTimeFaceInsights.Interfaces
     public interface IFaceService
     {
         FaceServiceClient GetFaceServiceClient();
+        void InitializeFaceServiceClient();
         Face[] DetectFaces(MemoryStream imageStream, IEnumerable<FaceAttributeType> faceAttributeTypes = null);
         Face[] DetectFaces(string imagePath, IEnumerable<FaceAttributeType> faceAttriubuteTypes = null);
         Face[] DetectFacesWithDefaultAttributes(MemoryStream imageStream);

@@ -37,7 +37,7 @@ namespace RealTimeFaceInsights.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        [global::System.Configuration.DefaultSettingValueAttribute("!!!NOT USED!!!")]
         public string EmotionAPIKey {
             get {
                 return ((string)(this["EmotionAPIKey"]));
@@ -49,7 +49,7 @@ namespace RealTimeFaceInsights.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        [global::System.Configuration.DefaultSettingValueAttribute("!!!NOT USED!!!")]
         public string VisionAPIKey {
             get {
                 return ((string)(this["VisionAPIKey"]));
@@ -92,6 +92,18 @@ namespace RealTimeFaceInsights.Properties {
             }
             set {
                 this["VisionAPIHost"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("00:00:03")]
+        public global::System.TimeSpan AnalysisInterval {
+            get {
+                return ((global::System.TimeSpan)(this["AnalysisInterval"]));
+            }
+            set {
+                this["AnalysisInterval"] = value;
             }
         }
     }

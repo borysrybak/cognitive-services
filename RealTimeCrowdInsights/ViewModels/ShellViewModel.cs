@@ -6,6 +6,7 @@ using RealTimeFaceInsights.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Text;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
@@ -22,6 +23,8 @@ namespace RealTimeFaceInsights.ViewModels
         private readonly IFaceService _faceService;
         private readonly DispatcherTimer _timer;
 
+        private Stopwatch _stopWatch;
+
         public ShellViewModel(IEventAggregator eventAggregator, IVideoFrameAnalyzerService videoFrameAnalyzerService,
             IVisualizationService visualizationService, IEmotionService emotionService, IFaceService faceService)
         {
@@ -33,14 +36,17 @@ namespace RealTimeFaceInsights.ViewModels
             _videoFrameAnalyzerService.InitializeFrameGrabber();
 
             _timer = new DispatcherTimer(DispatcherPriority.Render);
-            _timer.Interval = TimeSpan.FromSeconds(1);
-            _timer.Tick += (sender, args) => { CurrentTime = DateTime.Now.ToLongTimeString(); };
-            _timer.Start();
+            SetCurrentTime();
         }
 
         public List<string> CameraList
         {
-            get { return _videoFrameAnalyzerService.GetAvailableCameraList(); }
+            get
+            {
+                var availableCameraList = _videoFrameAnalyzerService.GetAvailableCameraList();
+                if (availableCameraList.Count != 0) { CameraListEnable = true; }
+                return availableCameraList;
+            }
         }
 
         private string _selectedCameraList;
@@ -51,6 +57,40 @@ namespace RealTimeFaceInsights.ViewModels
             {
                 _selectedCameraList = value;
                 NotifyOfPropertyChange(() => SelectedCameraList);
+                CanStartAnalyze = true;
+            }
+        }
+
+        private bool _canStartAnalyze = false;
+        public bool CanStartAnalyze
+        {
+            get { return _canStartAnalyze; }
+            set
+            {
+                _canStartAnalyze = value;
+                NotifyOfPropertyChange(() => CanStartAnalyze);
+            }
+        }
+
+        private bool _canStopAnalyze = false;
+        public bool CanStopAnalyze
+        {
+            get { return _canStopAnalyze; }
+            set
+            {
+                _canStopAnalyze = value;
+                NotifyOfPropertyChange(() => CanStopAnalyze);
+            }
+        }
+
+        private bool _cameraListEnable;
+        public bool CameraListEnable
+        {
+            get { return _cameraListEnable; }
+            set
+            {
+                _cameraListEnable = value;
+                NotifyOfPropertyChange(() => CameraListEnable);
             }
         }
 
@@ -330,7 +370,7 @@ namespace RealTimeFaceInsights.ViewModels
         }
 
         private int _faceAPICallCount;
-        private int FaceAPICallCount
+        public int FaceAPICallCount
         {
             get { return _faceAPICallCount; }
             set
@@ -549,14 +589,36 @@ namespace RealTimeFaceInsights.ViewModels
             }
         }
 
-        private int _currentSessionTimer = 0;
-        public int CurrentSessionTimer
+        private string _currentSessionTimer = "00:00.000";
+        public string CurrentSessionTimer
         {
             get { return _currentSessionTimer; }
             set
             {
                 _currentSessionTimer = value;
                 NotifyOfPropertyChange(() => CurrentSessionTimer);
+            }
+        }
+
+        private bool _settingsPanelIsVisible = true;
+        public bool SettingsPanelIsVisible
+        {
+            get { return _settingsPanelIsVisible; }
+            set
+            {
+                _settingsPanelIsVisible = value;
+                NotifyOfPropertyChange(() => SettingsPanelIsVisible);
+            }
+        }
+
+        private bool _statisticsIsVisible;
+        public bool StatisticsIsVisible
+        {
+            get { return _statisticsIsVisible; }
+            set
+            {
+                _statisticsIsVisible = value;
+                NotifyOfPropertyChange(() => StatisticsIsVisible);
             }
         }
 
@@ -574,12 +636,39 @@ namespace RealTimeFaceInsights.ViewModels
 
         public void StartAnalyze()
         {
-            _videoFrameAnalyzerService.StartProcessing();
+            _videoFrameAnalyzerService.StartProcessing(_selectedCameraList);
+            StartStopwatch();
+            CameraListEnable = false;
+            CanStartAnalyze = false;
+            CanStopAnalyze = true;
+            if (SettingsPanelIsVisible) { ShowHideSettings(); }
+            if (!StatisticsIsVisible) { ShowHideStatistics(); }
         }
 
         public void StopAnalyze()
         {
             _videoFrameAnalyzerService.StopProcessing();
+            StopStopwatch();
+            CameraListEnable = true;
+            CanStartAnalyze = true;
+            CanStopAnalyze = false;
+            if (!StatisticsIsVisible) { ShowHideStatistics(); }
+        }
+
+        public void ShowHideSettings()
+        {
+            SettingsPanelIsVisible = !SettingsPanelIsVisible;
+        }
+
+        public void ShowHideStatistics()
+        {
+            StatisticsIsVisible = !StatisticsIsVisible;
+        }
+
+        public void SaveSettings()
+        {
+            RealTimeFaceInsights.Properties.Settings.Default.Save();
+            ShowHideSettings();
         }
 
         public void Handle(FrameImageProvidedEvent message)
@@ -617,6 +706,38 @@ namespace RealTimeFaceInsights.ViewModels
             AssignFaceAPICallCount(faceAPICallCount);
         }
 
+        private void SetCurrentTime()
+        {
+            _timer.Interval = TimeSpan.FromMilliseconds(250);
+            _timer.Tick += SetCurrentTimeHandler;
+            _timer.Start();
+        }
+        private void SetCurrentTimeHandler(object sender, EventArgs args)
+        {
+            CurrentTime = DateTime.Now.ToLongTimeString();
+        }
+        private void StartStopwatch()
+        {
+            _stopWatch = Stopwatch.StartNew();
+            _timer.Tick += StopwatchHandler;
+        }
+
+        private void StopwatchHandler(object sender, EventArgs args)
+        {
+            var stopWatchTimeSpan = _stopWatch.Elapsed;
+            var elapsedMiliseconds = stopWatchTimeSpan.Milliseconds;
+            var elapsedSeconds = stopWatchTimeSpan.Seconds;
+            var elapsedMinutes = stopWatchTimeSpan.Minutes;
+
+            var currentSessionTime = $"{elapsedMinutes}:{elapsedSeconds}.{elapsedMiliseconds}";
+            CurrentSessionTimer = currentSessionTime;
+        }
+
+        private void StopStopwatch()
+        {
+            _stopWatch.Stop();
+            _timer.Tick -= StopwatchHandler;
+        }
         private void AssignFaceAttributes(FaceAttributes faceAttributes)
         {
             AssignBasicAttributes(faceAttributes);
@@ -720,7 +841,7 @@ namespace RealTimeFaceInsights.ViewModels
         }
         private void AssignFaceAPICallCount(int faceAPICallCount)
         {
-            var FaceAPICallCount = faceAPICallCount;
+            FaceAPICallCount = faceAPICallCount;
         }
     }
 }

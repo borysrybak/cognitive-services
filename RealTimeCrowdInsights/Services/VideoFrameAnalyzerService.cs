@@ -14,7 +14,6 @@ namespace RealTimeFaceInsights.Services
 {
     public class VideoFrameAnalyzerService : IVideoFrameAnalyzerService
     {
-        private readonly TimeSpan _analysisInterval = new TimeSpan(0, 0, 0, 1, 0);
         private readonly IEventAggregator _eventAggregator;
         private readonly IVisualizationService _visualizationService;
         private readonly IOpenCVService _openCVService;
@@ -47,9 +46,9 @@ namespace RealTimeFaceInsights.Services
             _frameGrabber.AnalysisFunction = _faceService.FacesAnalysisFunction;
         }
 
-        public void StartProcessing()
+        public void StartProcessing(string selectedCamera)
         {
-            StartProcessingCamera();
+            StartProcessingCamera(selectedCamera);
         }
 
         public void StopProcessing()
@@ -70,6 +69,15 @@ namespace RealTimeFaceInsights.Services
             {
                 result.Add(camera);
             }
+
+            return result;
+        }
+        private int GetSelectedCameraIndex(string selectedCamera)
+        {
+            var result = 0;
+
+            var cameraList = LoadCameraList();
+            var selectedCameraIndex = cameraList.FindIndex(a => a == selectedCamera);
 
             return result;
         }
@@ -116,9 +124,12 @@ namespace RealTimeFaceInsights.Services
                 }));
             };
         }
-        private async void StartProcessingCamera()
+        private async void StartProcessingCamera(string selectedCamera)
         {
-            _frameGrabber.TriggerAnalysisOnInterval(_analysisInterval);
+            _faceService.InitializeFaceServiceClient();
+            var analysisInterval = Properties.Settings.Default.AnalysisInterval;
+            _frameGrabber.TriggerAnalysisOnInterval(analysisInterval);
+            int selectedCameraIndex = GetSelectedCameraIndex(selectedCamera);
             await _frameGrabber.StartProcessingCameraAsync();
         }
         private async void StopProcessingCamera()

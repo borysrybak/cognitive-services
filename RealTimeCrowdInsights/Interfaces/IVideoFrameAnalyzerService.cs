@@ -6,7 +6,7 @@ namespace RealTimeFaceInsights.Interfaces
     {
         List<string> GetAvailableCameraList();
         void InitializeFrameGrabber();
-        void StartProcessing();
+        void StartProcessing(string selectedCamera);
         void StopProcessing();
     }
 }
