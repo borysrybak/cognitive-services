@@ -1,24 +1,37 @@
-﻿using OpenCvSharp.Extensions;
-using RealTimeCrowdInsights.Interfaces;
-using RealTimeCrowdInsights.Models;
+﻿using Caliburn.Micro;
+using OpenCvSharp;
+using OpenCvSharp.Extensions;
+using RealTimeFaceInsights.Events;
+using RealTimeFaceInsights.Interfaces;
+using RealTimeFaceInsights.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Windows;
 using VideoFrameAnalyzer;
 
-namespace RealTimeCrowdInsights.Services
+namespace RealTimeFaceInsights.Services
 {
     public class VideoFrameAnalyzerService : IVideoFrameAnalyzerService
     {
+        private readonly TimeSpan _analysisInterval = new TimeSpan(0, 0, 0, 1, 0);
+        private readonly IEventAggregator _eventAggregator;
+        private readonly IVisualizationService _visualizationService;
         private readonly IOpenCVService _openCVService;
+        private readonly IFaceService _faceService;
         private readonly FrameGrabber<LiveCameraResult> _frameGrabber;
+        private readonly CascadeClassifier _localFaceDetector;
 
-        public VideoFrameAnalyzerService(IOpenCVService openCVService)
+        private LiveCameraResult _currentLiveCameraResult;
+
+        public VideoFrameAnalyzerService(IEventAggregator eventAggregator, IVisualizationService visualizationService, IOpenCVService openCVService, IFaceService faceService)
         {
             _frameGrabber = new FrameGrabber<LiveCameraResult>();
+            _eventAggregator = eventAggregator;
+            _visualizationService = visualizationService;
             _openCVService = openCVService;
+            _faceService = faceService;
+            _localFaceDetector = _openCVService.DefaultFrontalFaceDetector();
         }
 
         public List<string> GetAvailableCameraList()
@@ -31,6 +44,7 @@ namespace RealTimeCrowdInsights.Services
             SetUpListenerNewFrame();
             SetUpListenerNewResultFromAPICall();
             _openCVService.DefaultFrontalFaceDetector();
+            _frameGrabber.AnalysisFunction = _faceService.FacesAnalysisFunction;
         }
 
         public void StartProcessing()
@@ -38,11 +52,16 @@ namespace RealTimeCrowdInsights.Services
             StartProcessingCamera();
         }
 
+        public void StopProcessing()
+        {
+            StopProcessingCamera();
+        }
+
         private List<string> LoadCameraList()
         {
             var result = new List<string>();
             var numberOfCameras = _frameGrabber.GetNumCameras();
-            if(numberOfCameras == 0)
+            if (numberOfCameras == 0)
             {
                 //TODO: Listen from ShellViewModel for message about "No cameras found!"
             }
@@ -58,27 +77,23 @@ namespace RealTimeCrowdInsights.Services
         {
             _frameGrabber.NewFrameProvided += (s, e) =>
             {
+                var detectedFacesRectangles = _localFaceDetector.DetectMultiScale(e.Frame.Image);
+                e.Frame.UserData = detectedFacesRectangles;
 
-                // The callback may occur on a different thread, so we must use the
-                // MainWindow.Dispatcher when manipulating the UI. 
-                System.Windows.Application.Current.Dispatcher.BeginInvoke((Action)(() =>
+                Application.Current.Dispatcher.BeginInvoke((System.Action)(() =>
                 {
-                    // Display the image in the left pane.
-                    var x = e.Frame.Image.ToBitmapSource();
+                    var frameImage = e.Frame.Image.ToBitmapSource();
+                    var resultImage = _visualizationService.Visualize(e.Frame, _currentLiveCameraResult);
+                    _eventAggregator.PublishOnUIThread(new FrameImageProvidedEvent() { FrameImage = frameImage });
+                    _eventAggregator.PublishOnUIThread(new ResultImageAvailableEvent() { ResultImage = resultImage });
                 }));
-
-                // See if auto-stop should be triggered. 
-                //if (Properties.Settings.Default.AutoStopEnabled && (DateTime.Now - _startTime) > Properties.Settings.Default.AutoStopTime)
-                //{
-                //    _grabber.StopProcessingAsync();
-                //}
             };
         }
         private void SetUpListenerNewResultFromAPICall()
         {
             _frameGrabber.NewResultAvailable += (s, e) =>
             {
-                System.Windows.Application.Current.Dispatcher.BeginInvoke((Action)(() =>
+                Application.Current.Dispatcher.BeginInvoke((System.Action)(() =>
                 {
                     if (e.TimedOut)
                     {
@@ -86,40 +101,29 @@ namespace RealTimeCrowdInsights.Services
                     }
                     else if (e.Exception != null)
                     {
-                        //string apiName = "";
-                        //string message = e.Exception.Message;
-                        //var faceEx = e.Exception as FaceAPIException;
-                        //var emotionEx = e.Exception as Microsoft.ProjectOxford.Common.ClientException;
-                        //var visionEx = e.Exception as Microsoft.ProjectOxford.Vision.ClientException;
-                        //if (faceEx != null)
-                        //{
-                        //    apiName = "Face";
-                        //    message = faceEx.ErrorMessage;
-                        //}
-                        //else if (emotionEx != null)
-                        //{
-                        //    apiName = "Emotion";
-                        //    message = emotionEx.Error.Message;
-                        //}
-                        //else if (visionEx != null)
-                        //{
-                        //    apiName = "Computer Vision";
-                        //    message = visionEx.Error.Message;
-                        //}
-                        //MessageArea.Text = string.Format("{0} API call failed on frame {1}. Exception: {2}", apiName, e.Frame.Metadata.Index, message);
+                        //MessageArea.Text = "API Exception Message.";
                     }
                     else
                     {
-                        var x = e.Analysis;
+                        _currentLiveCameraResult = e.Analysis;
+
+                        if (_currentLiveCameraResult.Faces.Length > 0)
+                        {
+                            var faceAttributes = _currentLiveCameraResult.Faces[0].FaceAttributes;
+                            _eventAggregator.PublishOnUIThread(new FaceAttributesResultEvent() { FaceAttributesResult = faceAttributes });
+                        }
                     }
                 }));
             };
         }
         private async void StartProcessingCamera()
         {
-            // How often to analyze. 
-            //_frameGrabber.TriggerAnalysisOnInterval(Properties.Settings.Default.AnalysisInterval);
-            //await _frameGrabber.StartProcessingCameraAsync(CameraList.SelectedIndex);
+            _frameGrabber.TriggerAnalysisOnInterval(_analysisInterval);
+            await _frameGrabber.StartProcessingCameraAsync();
+        }
+        private async void StopProcessingCamera()
+        {
+            await _frameGrabber.StopProcessingAsync();
         }
     }
 }

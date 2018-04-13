@@ -1,4 +1,4 @@
-﻿namespace RealTimeCrowdInsights.Views
+﻿namespace RealTimeFaceInsights.Views
 {
     public partial class ShellView
     {

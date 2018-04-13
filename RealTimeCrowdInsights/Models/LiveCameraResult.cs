@@ -31,12 +31,13 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
-namespace RealTimeCrowdInsights.Models
+namespace RealTimeFaceInsights.Models
 {
     public class LiveCameraResult
     {
         public Microsoft.ProjectOxford.Face.Contract.Face[] Faces { get; set; }
         public Microsoft.ProjectOxford.Common.Contract.EmotionScores[] EmotionScores { get; set; }
+        public string[] CelebrityNames { get; set; } = null;
         public Microsoft.ProjectOxford.Vision.Contract.Tag[] Tags { get; set; }
     }
 }

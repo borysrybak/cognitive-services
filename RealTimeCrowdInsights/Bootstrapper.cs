@@ -1,12 +1,12 @@
 ﻿using Caliburn.Micro;
-using RealTimeCrowdInsights.Interfaces;
-using RealTimeCrowdInsights.Services;
-using RealTimeCrowdInsights.ViewModels;
+using RealTimeFaceInsights.Interfaces;
+using RealTimeFaceInsights.Services;
+using RealTimeFaceInsights.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Windows;
 
-namespace RealTimeCrowdInsights
+namespace RealTimeFaceInsights
 {
     public class Bootstrapper : BootstrapperBase
     {
@@ -22,8 +22,13 @@ namespace RealTimeCrowdInsights
             _container = new SimpleContainer();
 
             _container.Singleton<IWindowManager, WindowManager>();
-            _container.Singleton<IVideoFrameAnalyzerService, VideoFrameAnalyzerService>();
+            _container.Singleton<IEventAggregator, EventAggregator>();
+            _container.Singleton<IComputerVisionService, ComputerVisionService>();
+            _container.Singleton<IEmotionService, EmotionService>();
+            _container.Singleton<IFaceService, FaceService>();
             _container.Singleton<IOpenCVService, OpenCVService>();
+            _container.Singleton<IVideoFrameAnalyzerService, VideoFrameAnalyzerService>();
+            _container.Singleton<IVisualizationService, VisualizationService>();
 
             _container.PerRequest<ShellViewModel>();
         }

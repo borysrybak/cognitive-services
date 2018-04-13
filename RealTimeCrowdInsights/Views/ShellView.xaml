@@ -1,44 +1,499 @@
-﻿<Window x:Class="RealTimeCrowdInsights.Views.ShellView"
+﻿<Window x:Class="RealTimeFaceInsights.Views.ShellView"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
-        Title="ShellView" Height="550" Width="725">
+        Title="ShellView">
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="35" />
-            <RowDefinition Height="*" />
-            <RowDefinition Height="35" />
-        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="4*" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
 
-        <!--#region HEADER-->
-        <Grid Grid.Row="0">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
-            <StackPanel Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Left">
-                <ComboBox x:Name="CameraList"  Width="100" Margin="5,5,0,5" />
-                <Button x:Name="StartAnalyze" Content="Analyze" Width="75" Padding="5,0" Margin="5,5,0,5" />
-                <Button x:Name="StopAnalyze" Content="Stop" Width="75" Padding="5,0" Margin="5,5,0,5" />
-            </StackPanel>
-            <StackPanel Grid.Column="1" Orientation="Horizontal">
+        <Grid Grid.Column="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="35" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="65" />
+            </Grid.RowDefinitions>
 
-            </StackPanel>
+            <!--#region HEADER-->
+            <Grid Background="#EFEFEF" Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <StackPanel Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Left">
+                    <ComboBox x:Name="CameraList"  Width="100" Margin="5,5,0,5" />
+                    <Button x:Name="StartAnalyze" Content="Analyze" Width="75" Padding="5,0" Margin="5,5,0,5" />
+                    <Button x:Name="StopAnalyze" Content="Stop" Width="75" Padding="5,0" Margin="5,5,0,5" />
+                </StackPanel>
+
+                <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
+                    <Button x:Name="ShowStatistics" Content="Statistics" Width="75" Padding="5,0" Margin="5,5,0,5" />
+                </StackPanel>
+            </Grid>
+            <!--#endregion HEADER-->
+
+            <!--#region BODY-->
+            <Grid Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="2*" />
+                </Grid.ColumnDefinitions>
+
+                <Grid Grid.Column="0" Margin="5">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="3*" />
+                    </Grid.RowDefinitions>
+
+                    <Image Grid.Row="0" VerticalAlignment="Top" Grid.Column="0" Source="{Binding FrameImage}" />
+                    <StackPanel Grid.Row="1">
+
+                        <!--#region BASIC-->
+                        <Button Content="BASIC" Height="20" HorizontalAlignment="Stretch" />
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="3*" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+
+                            <Grid Grid.Column="0">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*" />
+                                    <RowDefinition Height="*" />
+                                </Grid.RowDefinitions>
+
+                                <StackPanel Margin="5,0,0,0" HorizontalAlignment="Left" Grid.Row="0" Orientation="Horizontal">
+                                    <TextBlock Text="Age: " />
+                                    <TextBlock x:Name="Age" FontWeight="Bold" Text="0" />
+                                </StackPanel>
+
+                                <StackPanel Margin="5,0,0,0" HorizontalAlignment="Left" Grid.Row="1" Orientation="Horizontal">
+                                    <TextBlock Text="Gender: " />
+                                    <TextBlock x:Name="Gender" FontWeight="Bold" Text="GENDER" />
+                                </StackPanel>
+                            </Grid>
+
+                            <Grid Grid.Column="1">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*" />
+                                    <RowDefinition Height="*" />
+                                    <RowDefinition Height="*" />
+                                </Grid.RowDefinitions>
+
+                                <StackPanel Margin="5,0,0,0" HorizontalAlignment="Left" Grid.Row="0" Orientation="Horizontal">
+                                    <TextBlock FontSize="8" Text="Roll: " />
+                                    <TextBlock x:Name="Roll" FontWeight="Bold" FontSize="8" Text="0" />
+                                </StackPanel>
+
+                                <StackPanel Margin="5,0,0,0" HorizontalAlignment="Left" Grid.Row="1" Orientation="Horizontal">
+                                    <TextBlock FontSize="8" Text="Yaw: " />
+                                    <TextBlock x:Name="Yaw" FontWeight="Bold" FontSize="8" Text="0" />
+                                </StackPanel>
+
+                                <StackPanel Margin="5,0,0,0" HorizontalAlignment="Left" Grid.Row="2" Orientation="Horizontal">
+                                    <TextBlock FontSize="8" Text="Pitch: " />
+                                    <TextBlock x:Name="Pitch" FontWeight="Bold" FontSize="8" Text="0" />
+                                </StackPanel>
+                            </Grid>
+
+                        </Grid>
+                        <!--#endregion BASIC-->
+
+                        <!--#region HAIR-->
+                        <Button Content="HAIR" Height="20" HorizontalAlignment="Stretch" />
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="*" />
+                            </Grid.RowDefinitions>
+
+                            <Grid Grid.Row="0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+
+                                <StackPanel Grid.Column="0" >
+                                    <TextBlock FontSize="8" HorizontalAlignment="Center" Text="Bald: " />
+                                    <TextBlock x:Name="Bald" HorizontalAlignment="Center" FontWeight="Bold" Text="0" />
+                                </StackPanel>
+
+                                <StackPanel Grid.Column="1" >
+                                    <TextBlock FontSize="8" HorizontalAlignment="Center" Text="Invisible: " />
+                                    <TextBlock x:Name="IsInvisibile" HorizontalAlignment="Center" FontWeight="Bold" Text="false" />
+                                </StackPanel>
+                            </Grid>
+
+                            <Grid Grid.Row="1">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+
+                                <Grid Grid.Column="0">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="*" />
+                                        <RowDefinition Height="*" />
+                                    </Grid.RowDefinitions>
+
+                                    <StackPanel Grid.Row="0" >
+                                        <TextBlock FontSize="8" HorizontalAlignment="Center" Text="Brown: " />
+                                        <TextBlock x:Name="Brown" HorizontalAlignment="Center" FontWeight="Bold" Text="0" />
+                                    </StackPanel>
+
+                                    <StackPanel Grid.Row="1" >
+                                        <TextBlock FontSize="8" HorizontalAlignment="Center" Text="Blond: " />
+                                        <TextBlock x:Name="Blond" HorizontalAlignment="Center" FontWeight="Bold" Text="0" />
+                                    </StackPanel>
+                                </Grid>
+
+                                <Grid Grid.Column="1">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="*" />
+                                        <RowDefinition Height="*" />
+                                    </Grid.RowDefinitions>
+
+                                    <StackPanel Grid.Row="0" >
+                                        <TextBlock FontSize="8" HorizontalAlignment="Center" Text="Black: " />
+                                        <TextBlock x:Name="Black" HorizontalAlignment="Center" FontWeight="Bold" Text="0" />
+                                    </StackPanel>
+
+                                    <StackPanel Grid.Row="1" >
+                                        <TextBlock FontSize="8" HorizontalAlignment="Center" Text="Other: " />
+                                        <TextBlock x:Name="Other" HorizontalAlignment="Center" FontWeight="Bold" Text="0" />
+                                    </StackPanel>
+                                </Grid>
+
+                                <Grid Grid.Column="2">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="*" />
+                                        <RowDefinition Height="*" />
+                                    </Grid.RowDefinitions>
+
+                                    <StackPanel Grid.Row="0" >
+                                        <TextBlock FontSize="8" HorizontalAlignment="Center" Text="Gray: " />
+                                        <TextBlock x:Name="Gray" HorizontalAlignment="Center" FontWeight="Bold" Text="0" />
+                                    </StackPanel>
+
+                                    <StackPanel Grid.Row="1" >
+                                        <TextBlock FontSize="8" HorizontalAlignment="Center" Text="Red: " />
+                                        <TextBlock x:Name="Red" HorizontalAlignment="Center" FontWeight="Bold" Text="0" />
+                                    </StackPanel>
+                                </Grid>
+
+                                <Grid Grid.Column="3">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="*" />
+                                        <RowDefinition Height="*" />
+                                    </Grid.RowDefinitions>
+
+                                    <StackPanel Grid.Row="0" >
+                                        <TextBlock FontSize="8" HorizontalAlignment="Center" Text="White: " />
+                                        <TextBlock x:Name="White" HorizontalAlignment="Center" FontWeight="Bold" Text="0" />
+                                    </StackPanel>
+
+                                    <StackPanel Grid.Row="1" >
+                                        <TextBlock FontSize="8" HorizontalAlignment="Center" Text="Unknown: " />
+                                        <TextBlock x:Name="Unknown" HorizontalAlignment="Center" FontWeight="Bold" Text="0" />
+                                    </StackPanel>
+                                </Grid>
+                            </Grid>
+                        </Grid>
+                        <!--#endregion HAIR-->
+
+                        <!--#region FACIAL HAIR-->
+                        <Button Content="FACIAL HAIR" Height="20" HorizontalAlignment="Stretch" />
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+
+                            <StackPanel Grid.Column="0" >
+                                <TextBlock FontSize="8" HorizontalAlignment="Center" Text="Moustache: " />
+                                <TextBlock x:Name="Moustache" HorizontalAlignment="Center" FontWeight="Bold" Text="0" />
+                            </StackPanel>
+
+                            <StackPanel Grid.Column="1" >
+                                <TextBlock FontSize="8" HorizontalAlignment="Center" Text="Beard: " />
+                                <TextBlock x:Name="Beard" HorizontalAlignment="Center" FontWeight="Bold" Text="0" />
+                            </StackPanel>
+
+                            <StackPanel Grid.Column="2" >
+                                <TextBlock FontSize="8" HorizontalAlignment="Center" Text="Sideburns: " />
+                                <TextBlock x:Name="Sideburns" HorizontalAlignment="Center" FontWeight="Bold" Text="0" />
+                            </StackPanel>
+                        </Grid>
+                        <!--#endregion FACIAL HAIR-->
+
+                        <!--#region ADDITIONAL-->
+                        <Button Content="ADDITIONAL" Height="20" HorizontalAlignment="Stretch" />
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="*" />
+                            </Grid.RowDefinitions>
+
+                            <Grid Grid.Row="0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+
+                                <StackPanel Grid.Column="0" >
+                                    <TextBlock FontSize="8" HorizontalAlignment="Center" Text="Glasses: " />
+                                    <TextBlock x:Name="Glasses" HorizontalAlignment="Center" FontWeight="Bold" Text="TEXT" />
+                                </StackPanel>
+
+                                <StackPanel Grid.Column="1" >
+                                    <TextBlock FontSize="8" HorizontalAlignment="Center" Text="EyeMakeup: " />
+                                    <TextBlock x:Name="IsEyeMakeup" HorizontalAlignment="Center" FontWeight="Bold" Text="false" />
+                                </StackPanel>
+
+                                <StackPanel Grid.Column="2" >
+                                    <TextBlock FontSize="8" HorizontalAlignment="Center" Text="LipMakeup: " />
+                                    <TextBlock x:Name="IsLipMakeup" HorizontalAlignment="Center" FontWeight="Bold" Text="false" />
+                                </StackPanel>
+                            </Grid>
+
+                            <Grid Grid.Row="1">
+                                <StackPanel Margin="5,0,0,0" HorizontalAlignment="Left" Orientation="Horizontal">
+                                    <TextBlock Text="Accessories: " />
+                                    <TextBlock x:Name="Accessories" FontWeight="Bold" Text="LIST" />
+                                </StackPanel>
+                            </Grid>
+                        </Grid>
+                        <!--#endregion ADDITIONAL-->
+
+                    </StackPanel>
+                </Grid>
+
+                <Grid Grid.Column="1" Margin="5">
+                    <Image VerticalAlignment="Top" Grid.Column="1" Source="{Binding ResultImage}" />
+                </Grid>
+            </Grid>
+            <!--#endregion BODY-->
+
+            <!--#region FOOTER-->
+            <Grid Background="#EFEFEF" Grid.Row="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <Grid Background="White" Grid.Column="0" Margin="5">
+                    <ItemsControl ItemsSource="{Binding EmotionBars}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel HorizontalAlignment="Right" Orientation="Horizontal"/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                    </ItemsControl>
+                </Grid>
+
+            </Grid>
+            <!--#endregion FOOTER-->
         </Grid>
-        <!--#endregion HEADER-->
 
-        <!--#region BODY-->
-        <Grid Grid.Row="1">
-            <Image Source="{Binding ImageSource}" Margin="5" />
+        <!--#region STATISTICS-->
+        <Grid Background="#EFEFEF" Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="35" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="65" />
+            </Grid.RowDefinitions>
+
+            <Grid Grid.Row="0" Margin="5">
+                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Horizontal">
+                    <TextBlock Text="TIME: " />
+                    <TextBlock x:Name="CurrentTime" />
+                </StackPanel>
+            </Grid>
+
+            <Grid Grid.Row="1" Margin="5">
+                <StackPanel>
+                    <TextBlock Text="Current session timer: " />
+                    <TextBlock Text="00:00:00" FontWeight="Bold" x:Name="CurrentSessionTimer" />
+
+                    <Rectangle Margin="0,5,0,5" Height="1" Fill="Black" />
+
+                    <TextBlock Text="Face API calls: " />
+                    <TextBlock Text="0" FontWeight="Bold" x:Name="FaceAPICalls" />
+
+                    <Rectangle Margin="0,5,0,1" Height="1" Fill="Black" />
+                    <Rectangle Margin="0,1,0,5" Height="1" Fill="Black" />
+
+                    <TextBlock Text="Average Age (over time): " />
+                    <TextBlock Text="25" FontWeight="Bold" x:Name="AverageAge" />
+
+                    <Rectangle Margin="0,5,0,5" Height="1" Fill="Black" />
+
+                    <TextBlock Text="Hair Color (mixed): " />
+                    <Grid Height="25">
+                        <ItemsControl ItemsSource="{Binding HairColor}" />
+                    </Grid>
+
+                    <Rectangle Margin="0,5,0,1" Height="1" Fill="Black" />
+                    <Rectangle Margin="0,1,0,5" Height="1" Fill="Black" />
+
+                    <TextBlock Text="Emotions (current): " />
+                    <Grid Margin="5">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <Grid Grid.Column="0">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="*" />
+                            </Grid.RowDefinitions>
+                            <StackPanel HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="0" Orientation="Horizontal">
+                                <TextBlock VerticalAlignment="Center" FontSize="10" Text="Anger" />
+                                <Rectangle Margin="1,0,1,0" Width="5" Height="10" Fill="Red" />
+                                <TextBlock x:Name="Anger" FontWeight="Bold" FontSize="10" Text="1.000" />
+                            </StackPanel>
+
+                            <StackPanel HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="1" Orientation="Horizontal">
+                                <TextBlock VerticalAlignment="Center" FontSize="10" Text="Contempt" />
+                                <Rectangle Margin="1,0,1,0" Width="5" Height="10" Fill="Orange" />
+                                <TextBlock x:Name="Contempt" FontWeight="Bold" FontSize="10" Text="1.000" />
+                            </StackPanel>
+
+                            <StackPanel HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="2" Orientation="Horizontal">
+                                <TextBlock VerticalAlignment="Center" FontSize="10" Text="Disgust" />
+                                <Rectangle Margin="1,0,1,0" Width="5" Height="10" Fill="Indigo" />
+                                <TextBlock x:Name="Disgust" FontWeight="Bold" FontSize="10" Text="1.000" />
+                            </StackPanel>
+
+                            <StackPanel HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="3" Orientation="Horizontal">
+                                <TextBlock VerticalAlignment="Center" FontSize="10" Text="Fear" />
+                                <Rectangle Margin="1,0,1,0" Width="5" Height="10" Fill="Violet" />
+                                <TextBlock x:Name="Fear" FontWeight="Bold" FontSize="10" Text="1.000" />
+                            </StackPanel>
+                        </Grid>
+                        <Grid Grid.Column="1">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="*" />
+                            </Grid.RowDefinitions>
+                            <StackPanel HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="0" Orientation="Horizontal">
+                                <TextBlock VerticalAlignment="Center" FontSize="10" Text="Happiness" />
+                                <Rectangle Margin="1,0,1,0" Width="5" Height="10" Fill="Green" />
+                                <TextBlock x:Name="Happiness" FontWeight="Bold" FontSize="10" Text="1.000" />
+                            </StackPanel>
+
+                            <StackPanel HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="1" Orientation="Horizontal">
+                                <TextBlock VerticalAlignment="Center" FontSize="10" Text="Neutral" />
+                                <Rectangle Margin="1,0,1,0" Width="5" Height="10" Fill="Yellow" />
+                                <TextBlock x:Name="Neutral" FontWeight="Bold" FontSize="10" Text="1.000" />
+                            </StackPanel>
+
+                            <StackPanel HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="2" Orientation="Horizontal">
+                                <TextBlock VerticalAlignment="Center" FontSize="10" Text="Sadness" />
+                                <Rectangle Margin="1,0,1,0" Width="5" Height="10" Fill="Black" />
+                                <TextBlock x:Name="Sadness" FontWeight="Bold" FontSize="10" Text="1.000" />
+                            </StackPanel>
+
+                            <StackPanel HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="3" Orientation="Horizontal">
+                                <TextBlock VerticalAlignment="Center" FontSize="10" Text="Surprise" />
+                                <Rectangle Margin="1,0,1,0" Width="5" Height="10" Fill="Blue" />
+                                <TextBlock x:Name="Surprise" FontWeight="Bold" FontSize="10" Text="1.000" />
+                            </StackPanel>
+                        </Grid>
+                    </Grid>
+                    
+                    <Rectangle Margin="0,5,0,5" Height="1" Fill="Black" />
+
+                    <TextBlock Text="Emotions (average): " />
+                    <Grid Margin="5">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <Grid Grid.Column="0">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="*" />
+                            </Grid.RowDefinitions>
+                            <StackPanel HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="0" Orientation="Horizontal">
+                                <TextBlock VerticalAlignment="Center" FontSize="10" Text="Anger" />
+                                <Rectangle Margin="1,0,1,0" Width="5" Height="10" Fill="Red" />
+                                <TextBlock x:Name="AverageAnger" FontWeight="Bold" FontSize="10" Text="1.000" />
+                            </StackPanel>
+
+                            <StackPanel HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="1" Orientation="Horizontal">
+                                <TextBlock VerticalAlignment="Center" FontSize="10" Text="Contempt" />
+                                <Rectangle Margin="1,0,1,0" Width="5" Height="10" Fill="Orange" />
+                                <TextBlock x:Name="AverageContempt" FontWeight="Bold" FontSize="10" Text="1.000" />
+                            </StackPanel>
+
+                            <StackPanel HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="2" Orientation="Horizontal">
+                                <TextBlock VerticalAlignment="Center" FontSize="10" Text="Disgust" />
+                                <Rectangle Margin="1,0,1,0" Width="5" Height="10" Fill="Indigo" />
+                                <TextBlock x:Name="AverageDisgust" FontWeight="Bold" FontSize="10" Text="1.000" />
+                            </StackPanel>
+
+                            <StackPanel HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="3" Orientation="Horizontal">
+                                <TextBlock VerticalAlignment="Center" FontSize="10" Text="Fear" />
+                                <Rectangle Margin="1,0,1,0" Width="5" Height="10" Fill="Violet" />
+                                <TextBlock x:Name="AverageFear" FontWeight="Bold" FontSize="10" Text="1.000" />
+                            </StackPanel>
+                        </Grid>
+                        <Grid Grid.Column="1">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="*" />
+                            </Grid.RowDefinitions>
+                            <StackPanel HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="0" Orientation="Horizontal">
+                                <TextBlock VerticalAlignment="Center" FontSize="10" Text="Happiness" />
+                                <Rectangle Margin="1,0,1,0" Width="5" Height="10" Fill="Green" />
+                                <TextBlock x:Name="AverageHappiness" FontWeight="Bold" FontSize="10" Text="1.000" />
+                            </StackPanel>
+
+                            <StackPanel HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="1" Orientation="Horizontal">
+                                <TextBlock VerticalAlignment="Center" FontSize="10" Text="Neutral" />
+                                <Rectangle Margin="1,0,1,0" Width="5" Height="10" Fill="Yellow" />
+                                <TextBlock x:Name="AverageNeutral" FontWeight="Bold" FontSize="10" Text="1.000" />
+                            </StackPanel>
+
+                            <StackPanel HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="2" Orientation="Horizontal">
+                                <TextBlock VerticalAlignment="Center" FontSize="10" Text="Sadness" />
+                                <Rectangle Margin="1,0,1,0" Width="5" Height="10" Fill="Black" />
+                                <TextBlock x:Name="AverageSadness" FontWeight="Bold" FontSize="10" Text="1.000" />
+                            </StackPanel>
+
+                            <StackPanel HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="3" Orientation="Horizontal">
+                                <TextBlock VerticalAlignment="Center" FontSize="10" Text="Surprise" />
+                                <Rectangle Margin="1,0,1,0" Width="5" Height="10" Fill="Blue" />
+                                <TextBlock x:Name="AverageSurprise" FontWeight="Bold" FontSize="10" Text="1.000" />
+                            </StackPanel>
+                        </Grid>
+                    </Grid>
+                </StackPanel>
+
+            </Grid>
+
+            <Grid>
+
+            </Grid>
         </Grid>
-        <!--#endregion BODY-->
-
-        <!--#region FOOTER-->
-        <Grid Grid.Row="2">
-
-        </Grid>
-        <!--#endregion FOOTER-->
+        <!--#endregion STATISTICS-->
     </Grid>
 </Window>

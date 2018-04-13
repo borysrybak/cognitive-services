@@ -1,7 +1,7 @@
-﻿<Application x:Class="RealTimeCrowdInsights.App"
+﻿<Application x:Class="RealTimeFaceInsights.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:RealTimeCrowdInsights">
+             xmlns:local="clr-namespace:RealTimeFaceInsights">
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>

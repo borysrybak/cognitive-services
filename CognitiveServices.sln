@@ -31,7 +31,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ComputerVisionQuickStart", 
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Other", "Other", "{C0A7FEEA-BD67-44E7-B005-4A1A4E9E21D9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RealTimeCrowdInsights", "RealTimeCrowdInsights\RealTimeCrowdInsights.csproj", "{F386B659-4E5B-40C8-8613-5344EED2CCED}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RealTimeFaceInsights", "RealTimeCrowdInsights\RealTimeFaceInsights.csproj", "{F386B659-4E5B-40C8-8613-5344EED2CCED}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

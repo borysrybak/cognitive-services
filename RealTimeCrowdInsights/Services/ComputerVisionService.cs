@@ -1,19 +1,20 @@
 ﻿using Microsoft.ProjectOxford.Vision;
 using Microsoft.ProjectOxford.Vision.Contract;
-using RealTimeCrowdInsights.Interfaces;
+using RealTimeFaceInsights.Interfaces;
+using RealTimeFaceInsights.Models;
+using RealTimeFaceInsights.Utils;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
+using VideoFrameAnalyzer;
 
-namespace RealTimeCrowdInsights.Services
+namespace RealTimeFaceInsights.Services
 {
     public class ComputerVisionService : IComputerVisionService
     {
-        private readonly string _visionServiceClientSubscriptionKey = "x";
-        private readonly string _visionServiceClientApiRoot = "y";
+        private readonly string _visionServiceClientSubscriptionKey = Properties.Settings.Default.VisionAPIKey.Trim();
+        private readonly string _visionServiceClientApiRoot = Properties.Settings.Default.VisionAPIHost;
         private readonly VisionServiceClient _visionServiceClient;
 
         private int _visionAPICallCount = 0;
@@ -43,6 +44,21 @@ namespace RealTimeCrowdInsights.Services
             return _visionAPICallCount;
         }
 
+        public async Task<LiveCameraResult> VisionAnalysisFunction(VideoFrame frame)
+        {
+            return await SubmitVisionAnalysisFunction(frame);
+        }
+
+        private async Task<LiveCameraResult> SubmitVisionAnalysisFunction(VideoFrame frame)
+        {
+            var result = new LiveCameraResult();
+
+            var frameImage = frame.Image.ToMemoryStream(".jpg", ImageEncodingParameter.JpegParams); ;
+            var tags = await AnalyzeImageBySpecificVisualFeatures(frameImage, VisualFeature.Tags);
+            result.Tags = tags;
+
+            return result;
+        }
         private async Task<Tag[]> AnalyzeImageBySpecificVisualFeatures(dynamic image, params VisualFeature[] visualFeatures)
         {
             var result = new Tag[0];

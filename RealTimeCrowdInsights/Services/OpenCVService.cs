@@ -1,8 +1,11 @@
-﻿using OpenCvSharp;
-using RealTimeCrowdInsights.Enums;
-using RealTimeCrowdInsights.Interfaces;
+﻿using Microsoft.ProjectOxford.Face.Contract;
+using OpenCvSharp;
+using RealTimeFaceInsights.Enums;
+using RealTimeFaceInsights.Interfaces;
+using System;
+using System.Linq;
 
-namespace RealTimeCrowdInsights.Services
+namespace RealTimeFaceInsights.Services
 {
     public class OpenCVService : IOpenCVService
     {
@@ -16,6 +19,11 @@ namespace RealTimeCrowdInsights.Services
         public CascadeClassifier DefaultFrontalFaceDetector()
         {
             return GetLoadedClassifier(HaarCascade.FrontalFaceAlt2);
+        }
+
+        public void MatchAndReplaceFaces(Face[] faces, Rect[] clientRects)
+        {
+            MatchAndReplaceFaceRectangles(faces, clientRects);
         }
 
         private CascadeClassifier GetLoadedClassifier(HaarCascade haarCascade)
@@ -72,6 +80,21 @@ namespace RealTimeCrowdInsights.Services
 
             return result;
         }
+        private void MatchAndReplaceFaceRectangles(Face[] faces, Rect[] clientRects)
+        {
+            var sortedResultFaces = faces
+                .OrderBy(f => f.FaceRectangle.Left + 0.5 * f.FaceRectangle.Width)
+                .ToArray();
 
+            var sortedClientRects = clientRects
+                .OrderBy(r => r.Left + 0.5 * r.Width)
+                .ToArray();
+
+            for (int i = 0; i < Math.Min(faces.Length, clientRects.Length); i++)
+            {
+                Rect r = sortedClientRects[i];
+                sortedResultFaces[i].FaceRectangle = new FaceRectangle { Left = r.Left, Top = r.Top, Width = r.Width, Height = r.Height };
+            }
+        }
     }
 }

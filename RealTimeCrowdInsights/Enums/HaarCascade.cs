@@ -1,4 +1,4 @@
-﻿namespace RealTimeCrowdInsights.Enums
+﻿namespace RealTimeFaceInsights.Enums
 {
     public enum HaarCascade
     {
