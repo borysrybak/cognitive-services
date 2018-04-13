@@ -329,6 +329,17 @@ namespace RealTimeFaceInsights.ViewModels
             }
         }
 
+        private int _faceAPICallCount;
+        private int FaceAPICallCount
+        {
+            get { return _faceAPICallCount; }
+            set
+            {
+                _faceAPICallCount = value;
+                NotifyOfPropertyChange(() => FaceAPICallCount);
+            }
+        }
+
         private float _anger;
         public float Anger
         {
@@ -537,7 +548,18 @@ namespace RealTimeFaceInsights.ViewModels
                 NotifyOfPropertyChange(() => CurrentTime);
             }
         }
-        
+
+        private int _currentSessionTimer = 0;
+        public int CurrentSessionTimer
+        {
+            get { return _currentSessionTimer; }
+            set
+            {
+                _currentSessionTimer = value;
+                NotifyOfPropertyChange(() => CurrentSessionTimer);
+            }
+        }
+
         protected override void OnActivate()
         {
             _eventAggregator.Subscribe(this);
@@ -574,17 +596,25 @@ namespace RealTimeFaceInsights.ViewModels
         {
             var faceAttributes = message.FaceAttributesResult;
             AssignFaceAttributes(faceAttributes);
+
             var age = faceAttributes.Age;
             _faceService.AddAgeToStatistics(age);
+
             var averageAge = _faceService.CalculateAverageAge();
             AssignAverageAge(averageAge);
+
             var emotionScores = faceAttributes.Emotion;
             GenerateAndPopulateEmotionBar(emotionScores);
             _emotionService.AddEmotionScoresToStatistics(emotionScores);
+
             var emotionScoresStatistics = _emotionService.CalculateEmotionScoresStatistics();
             AssignEmotionStatistics(emotionScoresStatistics);
+
             var hairColors = faceAttributes.Hair.HairColor;
             GenerateHairColor(hairColors);
+
+            var faceAPICallCount = _faceService.GetFaceServiceClientAPICallCount();
+            AssignFaceAPICallCount(faceAPICallCount);
         }
 
         private void AssignFaceAttributes(FaceAttributes faceAttributes)
@@ -687,6 +717,10 @@ namespace RealTimeFaceInsights.ViewModels
         {
             var mixedHairColor = _visualizationService.MixHairColor(hairColors);
             HairColor = new ObservableCollection<Rectangle>(mixedHairColor);
+        }
+        private void AssignFaceAPICallCount(int faceAPICallCount)
+        {
+            var FaceAPICallCount = faceAPICallCount;
         }
     }
 }
